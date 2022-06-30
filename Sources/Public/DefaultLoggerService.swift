@@ -15,6 +15,25 @@ public final class DefaultLoggerService {
 
 }
 
+// MARK: - Public Methods
+
+public extension DefaultLoggerService {
+
+  func start(releaseStage: LoggerReleaseStage, apiKey: String) {
+    let configuration = BugsnagConfiguration(apiKey)
+    configuration.releaseStage = releaseStage.stringValue
+    configuration.addOnSendError { [weak self] _ in
+      // Prevent logging if opt-out.
+      if self?.onOptOut?() == true { return false }
+      // Otherwise report error.
+      return true
+    }
+
+    Bugsnag.start(with: configuration)
+  }
+
+}
+
 // MARK: - LoggerService
 
 extension DefaultLoggerService: LoggerService {
