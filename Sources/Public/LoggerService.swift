@@ -1,6 +1,6 @@
 import Foundation
 
-protocol LoggerService: AnyObject {
+public protocol LoggerService: AnyObject {
 
   typealias OnOptOutHandler = () -> Bool
 

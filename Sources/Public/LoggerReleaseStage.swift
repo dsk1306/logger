@@ -1,6 +1,6 @@
 import Foundation
 
-enum LoggerReleaseStage {
+public enum LoggerReleaseStage {
 
   case testFlight
   case development

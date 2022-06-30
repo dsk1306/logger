@@ -1,6 +1,6 @@
 import Foundation
 
-protocol LoggableError: LocalizedError {
+public protocol LoggableError: LocalizedError {
 
   typealias AnalyticParameters = [String: Any]?
   typealias AnalyticContext = String?
@@ -15,7 +15,7 @@ protocol LoggableError: LocalizedError {
 
 }
 
-extension LoggableError {
+public extension LoggableError {
 
   var analyticParameters: AnalyticParameters { nil }
   var analyticContext: AnalyticContext { nil }

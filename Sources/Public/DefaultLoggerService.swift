@@ -1,15 +1,15 @@
 import Bugsnag
 import Foundation
 
-final class DefaultLoggerService {
+public final class DefaultLoggerService {
 
   // MARK: - Properties
 
-  var onOptOut: OnOptOutHandler?
+  public var onOptOut: OnOptOutHandler?
 
   // MARK: - Initialization
 
-  init(onOptOut: OnOptOutHandler?) {
+  public init(onOptOut: OnOptOutHandler?) {
     self.onOptOut = onOptOut
   }
 
@@ -19,12 +19,12 @@ final class DefaultLoggerService {
 
 extension DefaultLoggerService: LoggerService {
 
-  func log(error: String) {
+  public func log(error: String) {
     let error = StringError(errorString: error)
     log(error: error)
   }
 
-  func log(error: Error) {
+  public func log(error: Error) {
     if let error = error as? LoggableError {
       guard error.shouldReport else { return }
       Bugsnag.notifyError(error) { report in
@@ -39,7 +39,7 @@ extension DefaultLoggerService: LoggerService {
     }
   }
 
-  func log(deinitOf object: Any) {
+  public func log(deinitOf object: Any) {
     #if DEBUG
     let typeOfObject = type(of: object)
     let describing = String(describing: typeOfObject)
@@ -47,7 +47,7 @@ extension DefaultLoggerService: LoggerService {
     #endif
   }
 
-  func log(items: Any...) {
+  public func log(items: Any...) {
     #if DEBUG
     print(items)
     #endif
@@ -103,7 +103,7 @@ private extension BugsnagEvent {
 
 // MARK: - String Error
 
-extension DefaultLoggerService {
+private extension DefaultLoggerService {
 
   struct StringError: LoggableError {
 
