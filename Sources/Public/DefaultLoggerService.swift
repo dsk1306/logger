@@ -122,7 +122,7 @@ private extension BugsnagEvent {
 
 // MARK: - String Error
 
-private extension DefaultLoggerService {
+extension DefaultLoggerService {
 
   struct StringError: LoggableError {
 
