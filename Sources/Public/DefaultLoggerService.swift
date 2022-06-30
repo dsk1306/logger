@@ -9,7 +9,7 @@ public final class DefaultLoggerService {
 
   // MARK: - Initialization
 
-  public init(onOptOut: OnOptOutHandler?) {
+  public init(onOptOut: OnOptOutHandler? = nil) {
     self.onOptOut = onOptOut
   }
 
