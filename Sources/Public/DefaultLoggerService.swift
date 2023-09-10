@@ -128,7 +128,7 @@ extension DefaultLoggerService {
 
     let errorString: String?
 
-    var analyticMessage: AnalyticContext { errorString }
+    var analyticContext: AnalyticContext { errorString }
 
   }
 
