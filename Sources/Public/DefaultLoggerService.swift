@@ -38,18 +38,18 @@ public extension DefaultLoggerService {
 
 extension DefaultLoggerService: LoggerService {
 
-  public func log(error: String) {
-    let error = StringError(errorString: error)
-    log(error: error)
+  public func log(error: String, file: String, line: Int) {
+    let error = StringError(analyticMessage: error)
+    log(error: error, file: file, line: line)
   }
 
-  public func log(error: Error) {
+  public func log(error: Error, file: String, line: Int) {
     if let error = error as? LoggableError {
       guard error.shouldReport else { return }
       Bugsnag.notifyError(error) { report in
         report.writeErrorClass(from: error)
         report.writeParameters(from: error)
-        report.writeContext(from: error)
+        report.writeContext(file: file, line: line)
         report.writeErrorMessage(from: error)
         return true
       }
@@ -91,6 +91,13 @@ private extension DefaultLoggerService {
 private extension BugsnagEvent {
 
   func writeParameters(from error: LoggableError) {
+    if let errorCode = error.errorCode {
+      addMetadata(
+        errorCode,
+        key: "errorCode",
+        section: DefaultLoggerService.Constant.sectionName
+      )
+    }
     guard let parameters = error.analyticParameters else { return }
     for (key, value) in parameters {
       addMetadata(
@@ -101,9 +108,15 @@ private extension BugsnagEvent {
     }
   }
 
-  func writeContext(from error: LoggableError) {
-    guard let context = error.analyticContext else { return }
-    self.context = context
+  func writeContext(file: String, line: Int) {
+    var file = file
+    if let component = file.components(separatedBy: "/").last {
+      file = component
+    }
+    if let component = file.components(separatedBy: ".").first {
+      file = component
+    }
+    self.context = [file, "Line \(line)"].joined(separator: " ")
   }
 
   func writeErrorClass(from error: LoggableError) {
@@ -126,9 +139,7 @@ extension DefaultLoggerService {
 
   struct StringError: LoggableError {
 
-    let errorString: String?
-
-    var analyticContext: AnalyticContext { errorString }
+    let analyticMessage: AnalyticMessage
 
   }
 
