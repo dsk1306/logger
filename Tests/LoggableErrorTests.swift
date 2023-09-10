@@ -16,7 +16,7 @@ final class LoggableErrorTests: XCTestCase {
   func test_stringError() {
     typealias StringError = DefaultLoggerService.StringError
 
-    let error: LoggableError = StringError(errorString: Constant.errorDescription)
+    let error: LoggableError = StringError(analyticMessage: Constant.errorDescription)
 
     XCTAssertEqual(error.localizedDescription, Constant.errorDescription)
     XCTAssertEqual(error.analyticMessage, Constant.errorDescription)
@@ -54,6 +54,5 @@ private enum TestError: LoggableError {
   }
 
   var analyticParameters: AnalyticParameters { nil }
-  var analyticContext: AnalyticContext { nil }
 
 }
